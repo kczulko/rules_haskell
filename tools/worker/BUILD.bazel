@@ -3,6 +3,7 @@ load("@rules_haskell//haskell:cabal.bzl", "haskell_cabal_binary")
 haskell_cabal_binary(
     name = "bin",
     srcs = glob(["**"]),
+    ghcopts = ["-Werror", "-Wall"],
     # Requires more recent GHC version than we use on Windows.
     tags = ["dont_test_on_windows"],
     visibility = ["//visibility:public"],
