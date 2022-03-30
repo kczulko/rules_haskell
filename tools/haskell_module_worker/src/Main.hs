@@ -1,27 +1,40 @@
 {-# LANGUAGE LambdaCase #-}
 module Main where
 
-import Compile (runSession, compile)
+import Compile (Status(..), runSession, compile)
 import Control.Exception (try)
-import Control.Monad (unless, when)
+import Control.Monad (forever, unless, when)
 import Control.Monad.IO.Class (liftIO)
+import Data.List (intersperse)
 import Data.Word (Word64)
 import GHC.IO.Handle (hDuplicate, hDuplicateTo)
 import GHC.Stats (getRTSStats, getRTSStatsEnabled, max_live_bytes)
-import Options (parseArgs)
+import Options (Options(..), parseArgs)
+import ProtoClient (WorkRequest(..), createProtoClient, readWorkRequest, writeWorkResponse)
 import System.Environment (getArgs)
-import System.IO (Handle, hPrint, stderr, stdout)
+import System.IO (Handle, hSetBinaryMode, stdin, stderr, stdout)
 import System.IO.Error (alreadyInUseErrorType, ioeGetErrorType)
 
 main :: IO ()
 main = do
-    (args, memoryAllowance) <- getArgs >>= parseArgs
+    opts <- getArgs >>= parseArgs
     stdout_dup <- redirectStdoutToStderr
-    st <- runSession $ do
-      st <- compile args 0
-      liftIO $ terminateIfUsingTooMuchMemory memoryAllowance
-      return st
-    hPrint stdout_dup st
+    hSetBinaryMode stdin True
+    hSetBinaryMode stdout_dup True
+    pc <- createProtoClient stdin stdout_dup
+    runSession $ (if optPersist opts then forever else id) $ do
+      wr <- liftIO $ readWorkRequest pc
+      st <- compile (wrArgs wr) (wrVerbosity wr)
+      liftIO $ writeWorkResponse pc (statusExitCode st) (statusOutput st)
+      liftIO $ when (optPersist opts) $
+        terminateIfUsingTooMuchMemory (optMemoryAllowance opts)
+  where
+    statusExitCode = \case { Succeeded{} -> 0; _ -> 1 }
+    statusOutput = \case
+      Succeeded logs -> unlines $ intersperse "" logs
+      CompileErrors logs errs -> unlines $ intersperse "" $ logs ++ errs
+      NonHaskellInputs files ->
+        unlines $ "haskell_module_worker error: non-haskell inputs:" : files
 
 -- Redirecting stdout to stderr trick is, albeit convenient, fragile under
 -- heavy parallelism https://gitlab.haskell.org/ghc/ghc/issues/16819
