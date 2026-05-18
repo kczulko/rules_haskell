@@ -50,7 +50,7 @@ main = hspec $ do
         `shouldBe`
         Nothing
     it "recognizes --help" $ do
-      parse ["-h"]
+      parse ["--help"]
         `shouldBe`
         Nothing
     it "parses file -h" $ do
