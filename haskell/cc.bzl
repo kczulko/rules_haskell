@@ -186,6 +186,7 @@ def ghc_cc_program_args(hs, cc, ld):
     """Returns the -pgm* flags required to override cc.
 
     Args:
+      hs: HaskellContext
       cc: string, path to the C compiler (cc_wrapper).
       ld: string, path to the linker (ld).
 

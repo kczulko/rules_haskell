@@ -1509,7 +1509,7 @@ def _pin_packages(repository_ctx, resolved):
     )
     hashes_url = "https://raw.githubusercontent.com/commercialhaskell/all-cabal-hashes/" + hashes_commit
 
-    resolved = dict(**resolved)
+    resolved = dict(resolved)
     for (_name, spec) in resolved.items():
         # Determine package sha256
         if spec["location"]["type"] == "hackage":
