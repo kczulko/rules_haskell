@@ -96,7 +96,6 @@ load("@rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_in
 
 bazel_integration_test_rules_dependencies()
 
-
 load(
     "@rules_haskell//:constants.bzl",
     _default_ghc_version = "test_ghc_version",
