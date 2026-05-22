@@ -63,6 +63,7 @@ bzl_library(
                 ":haskell_nix",
                 "//haskell",
                 "@rules_cc//cc:defs.bzl",
+                "@rules_java//java:rules",
                 "@rules_shell//shell:rules_bzl",
             ],
         ),
@@ -80,6 +81,7 @@ bzl_library(
             deps = [
                 ":haskell_nix",
                 "//haskell",
+                "@rules_java//java:rules",
                 "@rules_shell//shell:rules_bzl",
             ],
         ),
