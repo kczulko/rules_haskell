@@ -1,6 +1,7 @@
 """Support for protocol buffers"""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@rules_cc//cc:defs.bzl", "CcInfo")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load(
     ":private/cc_libraries.bzl",

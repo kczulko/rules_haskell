@@ -1,5 +1,6 @@
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
+load("@rules_cc//cc:defs.bzl", "CcInfo")
 
 def _dynamic_libraries_in_runfiles_test_impl(ctx):
     env = analysistest.begin(ctx)

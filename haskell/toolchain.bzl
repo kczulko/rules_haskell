@@ -1,6 +1,7 @@
 """Rules for defining toolchains"""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load(
     "//haskell/asterius:asterius_config.bzl",

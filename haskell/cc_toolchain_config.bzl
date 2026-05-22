@@ -10,6 +10,7 @@ load(
     "flag_set",
     "tool_path",
 )
+load("@rules_cc//cc:defs.bzl", "cc_common")
 
 def _impl(ctx):
     tool_paths = [

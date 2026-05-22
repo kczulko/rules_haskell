@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@rules_cc//cc:defs.bzl", "CcInfo")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load(
     "@rules_haskell//haskell:private/cc_libraries.bzl",

@@ -9,10 +9,6 @@ _lint_warnings = [
     "-function-docstring-args",  # TODO
     "-function-docstring-header",  # TODO
     "-function-docstring-return",  # TODO
-    "-native-cc-common",
-    "-native-cc-info",
-    "-native-cc-library",
-    "-native-cc-shared-library-info",
     "-native-java-common",
     "-native-java-info",
     "-native-proto",

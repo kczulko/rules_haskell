@@ -6,6 +6,8 @@ providers.
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
+load("@rules_cc//cc/common:cc_shared_library_info.bzl", "CcSharedLibraryInfo")
 load(
     ":private/packages.bzl",
     "ghc_pkg_recache",

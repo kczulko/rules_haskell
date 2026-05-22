@@ -9,7 +9,9 @@ load(
     "CPP_LINK_EXECUTABLE_ACTION_NAME",
     "C_COMPILE_ACTION_NAME",
 )
+load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain")
+load("@rules_cc//cc/common:cc_shared_library_info.bzl", "CcSharedLibraryInfo")
 load(
     "//haskell:providers.bzl",
     "HaskellInfo",
