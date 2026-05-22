@@ -1,6 +1,7 @@
 """Defines output groups that are consumed by tools such as 'hrepl'."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@com_google_protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
 load(":private/cc_libraries.bzl", "get_ghci_library_files")
 
 def write_proto_file(hs, output_name, proto_type, content):

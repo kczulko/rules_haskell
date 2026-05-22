@@ -62,6 +62,7 @@ bzl_library(
             deps = [
                 ":haskell_nix",
                 "//haskell",
+                "@com_google_protobuf//bazel/common:proto_info_bzl",
                 "@rules_cc//cc:defs.bzl",
                 "@rules_java//java:rules",
                 "@rules_shell//shell:rules_bzl",
@@ -81,6 +82,7 @@ bzl_library(
             deps = [
                 ":haskell_nix",
                 "//haskell",
+                "@com_google_protobuf//bazel/common:proto_info_bzl",
                 "@rules_java//java:rules",
                 "@rules_shell//shell:rules_bzl",
             ],
