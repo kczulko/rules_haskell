@@ -67,6 +67,15 @@ def rules_haskell_dependencies():
 
     maybe(
         http_archive,
+        name = "rules_java",
+        sha256 = "16bc94b1a3c64f2c36ceecddc9e09a643e80937076b97e934b96a8f715ed1eaa",
+        urls = [
+            "https://github.com/bazelbuild/rules_java/releases/download/6.5.2/rules_java-6.5.2.tar.gz",
+        ],
+    )
+
+    maybe(
+        http_archive,
         name = "rules_python",
         sha256 = "94750828b18044533e98a129003b6a68001204038dc4749f40b195b24c38f49f",
         strip_prefix = "rules_python-0.21.0",
