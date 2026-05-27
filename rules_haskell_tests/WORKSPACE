@@ -33,6 +33,9 @@ http_archive(
     url = "https://github.com/aspect-build/bazel-lib/releases/download/v2.20.0/bazel-lib-v2.20.0.tar.gz",
 )
 
+load("@aspect_bazel_lib//lib:repositories.bzl", "register_coreutils_toolchains")
+register_coreutils_toolchains()
+
 # bazel dependencies
 load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 load("@os_info//:os_info.bzl", "is_nix_shell", "is_windows")
