@@ -100,13 +100,15 @@ def get_library_files(hs, cc_libraries_info, libraries_to_link, dynamic = False,
     # PIC is irrelevant on static GHC.
     pic_required = pic and not hs.toolchain.static_runtime
     for lib_to_link in libraries_to_link:
-        cc_library_info = cc_libraries_info.libraries[cc_library_key(lib_to_link)]
         dynamic_lib = None
         if lib_to_link.dynamic_library:
             dynamic_lib = lib_to_link.dynamic_library
         elif lib_to_link.interface_library:
             dynamic_lib = lib_to_link.interface_library
+
         static_lib = None
+        need_cc_library_info = lib_to_link.pic_static_library or (lib_to_link.static_library and not pic_required)
+        cc_library_info = cc_libraries_info.libraries[cc_library_key(lib_to_link)] if need_cc_library_info else None
         if lib_to_link.pic_static_library:
             static_lib = cc_library_info.pic_static_library_link
             if static_lib == None:
