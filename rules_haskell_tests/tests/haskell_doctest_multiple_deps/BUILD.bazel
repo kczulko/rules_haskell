@@ -31,7 +31,6 @@ haskell_doctest(
 haskell_doctest(
     name = "both_doctest",
     tags = [
-        "manual",  # haskell_doctest seems to be failing at the moment with multiple deps.
         "requires_dynamic",
     ],
     deps = [
