@@ -131,6 +131,8 @@ jobs:
           options: ${{ env.NIX_SHELL_ARGS }}
           working-directory: rules_haskell_tests
           run: |
+            # ensure analysis works
+            bazel build --nobuild ... | (echo "targets: $( wc -l )")
             # XXX run start script `--with-bzlmod=true` when supported
             if ! ${{ matrix.bzlmod }}; then
               ./tests/run-start-script.sh --use-nix --with-bzlmod=${{ matrix.bzlmod }}
@@ -232,8 +234,10 @@ jobs:
       - name: Build & test - rules_haskell_tests
         if: matrix.module == 'rules_haskell_tests'
         shell: bash
+        working-directory: rules_haskell_tests
         run: |
-          cd rules_haskell_tests
+          # ensure analysis works
+          bazelisk build --nobuild ... | (echo "targets: $( wc -l )")
           ./tests/run-start-script.sh --use-bindists --with-bzlmod=${{ matrix.bzlmod }}
           # Quote the package specifier so that it works on Windows
           bazelisk test "//..."
