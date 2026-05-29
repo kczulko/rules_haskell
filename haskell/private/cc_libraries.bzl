@@ -108,13 +108,13 @@ def get_library_files(hs, cc_libraries_info, libraries_to_link, dynamic = False,
 
         static_lib = None
         need_cc_library_info = lib_to_link.pic_static_library or (lib_to_link.static_library and not pic_required)
-        cc_library_info = cc_libraries_info.libraries[cc_library_key(lib_to_link)] if need_cc_library_info else None
+        cc_library_info = cc_libraries_info.libraries.get(cc_library_key(lib_to_link)) if need_cc_library_info else None
         if lib_to_link.pic_static_library:
-            static_lib = cc_library_info.pic_static_library_link
+            static_lib = cc_libraries_info and cc_library_info.pic_static_library_link
             if static_lib == None:
                 static_lib = lib_to_link.pic_static_library
         elif lib_to_link.static_library and not pic_required:
-            static_lib = cc_library_info.static_library_link
+            static_lib = cc_library_info and cc_library_info.static_library_link
             if static_lib == None:
                 static_lib = lib_to_link.static_library
 
