@@ -29,6 +29,16 @@ def rules_haskell_dependencies():
 
     maybe(
         http_archive,
+        name = "package_metadata",
+        strip_prefix = "supply-chain-0.0.3/metadata",
+        urls = [
+            "https://github.com/bazel-contrib/supply-chain/releases/download/v0.0.3/supply-chain-v0.0.3.tar.gz",
+        ],
+        sha256 = "0e89367f1cb6d93a5a1afea4b55b11ea6b28f63f653b47154153677ca7d4afea",
+    )
+
+    maybe(
+        http_archive,
         name = "platforms",
         urls = [
             "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/1.1.0/platforms-1.1.0.tar.gz",
