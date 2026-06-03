@@ -9,7 +9,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_java",
-    version = "6.5.2",
+    version = "6.1.0",
 )
 bazel_dep(
     name = "rules_license",
@@ -17,12 +17,12 @@ bazel_dep(
 )
 bazel_dep(
     name = "protobuf",
-    version = "28.3",
+    version = "21.7",
     repo_name = "com_google_protobuf",
 )
 bazel_dep(
     name = "rules_cc",
-    version = "0.0.17",
+    version = "0.0.9",
 )
 bazel_dep(
     name = "rules_nodejs",
