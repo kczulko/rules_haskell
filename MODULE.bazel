@@ -16,10 +16,15 @@ bazel_dep(
     version = "1.0.0",
 )
 bazel_dep(
+    name = "abseil-cpp",
+    version = "20240116.3",
+)
+bazel_dep(
     name = "protobuf",
     version = "27.0",
     repo_name = "com_google_protobuf",
 )
+
 # workaround build problems on Windows
 single_version_override(
     module_name = "protobuf",
@@ -28,6 +33,7 @@ single_version_override(
     # TODO: remove for protobuf version >= 31.0
     patches = ["//haskell:private/com_google_protobuf-protoc-dbghlp.diff"],
 )
+
 bazel_dep(
     name = "rules_cc",
     version = "0.0.15",
