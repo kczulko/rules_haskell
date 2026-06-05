@@ -5,7 +5,7 @@ module(
 
 bazel_dep(
     name = "platforms",
-    version = "0.0.8",
+    version = "0.0.10",
 )
 bazel_dep(
     name = "rules_java",
@@ -17,12 +17,20 @@ bazel_dep(
 )
 bazel_dep(
     name = "protobuf",
-    version = "21.7",
+    version = "27.0",
     repo_name = "com_google_protobuf",
+)
+# workaround build problems on Windows
+single_version_override(
+    module_name = "protobuf",
+    patch_strip = 1,
+    # see https://github.com/protocolbuffers/protobuf/issues/16844
+    # TODO: remove for protobuf version >= 31.0
+    patches = ["//haskell:private/com_google_protobuf-protoc-dbghlp.diff"],
 )
 bazel_dep(
     name = "rules_cc",
-    version = "0.1.1",
+    version = "0.0.15",
 )
 bazel_dep(
     name = "rules_nodejs",
@@ -38,7 +46,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "bazel_skylib",
-    version = "1.5.0",
+    version = "1.7.1",
 )
 bazel_dep(
     name = "rules_proto",
@@ -196,7 +204,7 @@ register_toolchains(
 # For buildifier
 bazel_dep(
     name = "rules_go",
-    version = "0.39.1",
+    version = "0.41.0",
     dev_dependency = True,
     repo_name = "io_bazel_rules_go",
 )
