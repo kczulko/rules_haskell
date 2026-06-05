@@ -2,10 +2,25 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@rules_haskell//tools:os_info.bzl", "os_info")
+load("@rules_nixpkgs_cc//:cc.bzl", "nixpkgs_cc_configure")
+load("@rules_nixpkgs_core//:nixpkgs.bzl", "nixpkgs_local_repository")
 
 def repositories(*, bzlmod):
     # Some helpers for platform-dependent configuration
     os_info(name = "os_info")
+
+    nixpkgs_local_repository(
+        name = "nixpkgs_default",
+        nix_file = "@rules_haskell//nixpkgs:default.nix",
+    )
+
+    nixpkgs_cc_configure(
+        # Don't override the default cc toolchain needed for bindist mode.
+        name = "nixpkgs_config_cc",
+        repository = "@nixpkgs_default",
+        register = not bzlmod,
+        cc_std = "c++14",
+    )
 
     # For the cat_hs example.
     http_archive(

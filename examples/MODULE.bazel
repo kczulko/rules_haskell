@@ -8,6 +8,10 @@ bazel_dep(
     version = "0.13.0",
 )
 bazel_dep(
+    name = "rules_nixpkgs_cc",
+    version = "0.13.0",
+)
+bazel_dep(
     name = "rules_haskell_nix",
     version = "1.0",
 )
@@ -43,9 +47,17 @@ non_module_deps = use_extension(":non_module_deps.bzl", "non_module_deps")
 use_repo(
     non_module_deps,
     "Cabal",
+    "nixpkgs_config_cc",
+    "nixpkgs_config_cc_info",
+    "nixpkgs_config_cc_toolchains",
+    "nixpkgs_default",
     "os_info",
     "split",
     "zlib.hs",
+)
+
+register_toolchains(
+    "@nixpkgs_config_cc_toolchains//:all",
 )
 
 stack_snapshot = use_extension(
