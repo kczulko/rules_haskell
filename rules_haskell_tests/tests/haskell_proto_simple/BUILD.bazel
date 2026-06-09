@@ -2,6 +2,7 @@
 Minimal reproduction of https://github.com/tweag/rules_haskell/issues/1111
 """
 
+load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@rules_haskell//haskell:defs.bzl", "haskell_library")
 load(
     "@rules_haskell//haskell:protobuf.bzl",

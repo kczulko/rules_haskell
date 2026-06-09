@@ -6,8 +6,10 @@ load("@rules_haskell_ghc_version//:ghc_version.bzl", "GHC_VERSION")
 
 def rules_haskell_worker_dependencies(**stack_kwargs):
     """
-    Provide all repositories that are necessary for `rules_haskell`'s tools to
-    function.
+    Provide all repositories that are necessary for `rules_haskell`'s tools to function.
+
+    Args:
+      **stack_kwargs: Additional arguments for stack_snapshot rule.
     """
     excludes = native.existing_rules().keys()
 

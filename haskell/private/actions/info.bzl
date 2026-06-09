@@ -1,6 +1,7 @@
 """Defines output groups that are consumed by tools such as 'hrepl'."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@com_google_protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
 load(":private/cc_libraries.bzl", "get_ghci_library_files")
 
 def write_proto_file(hs, output_name, proto_type, content):
@@ -157,7 +158,7 @@ def compile_info_output_groups(
     Returns:
       A dict whose keys are output groups and values are depsets of Files.
     """
-    cc_libs = get_ghci_library_files(hs, cc.cc_libraries_info, cc.cc_libraries)
+    cc_libs = get_ghci_library_files(hs, cc.cc_libraries_info, cc.cc_libraries_direct)
     return {
         "haskell_cdep_libs": depset(cc_libs),
         "haskell_runfiles": runfiles,

@@ -1,6 +1,7 @@
 """Rules for defining toolchains"""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load(
     "//haskell/asterius:asterius_config.bzl",
@@ -350,9 +351,13 @@ def _haskell_toolchain_impl(ctx):
         ghc_tools = _GHC_BINARIES
 
         # GHC > 9.10 does not install ghci with relocatable = true, add the tool if it is available
-        if any([file.basename.startswith("ghci") for file in ctx.files.tools]):
-            ghc_tools = ghc_tools + ["ghci"]
-        else:
+        found = False
+        for file in ctx.files.tools:
+            if file.basename.startswith("ghci"):
+                ghc_tools = ghc_tools + ["ghci"]
+                found = True
+                break
+        if not found:
             # buildifier: disable=print
             print(
                 "WARN: ghci binary is not available for {}, `tools.ghci` will not exist on its haskell toolchain".format(

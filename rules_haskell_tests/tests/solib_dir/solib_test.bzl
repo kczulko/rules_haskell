@@ -1,3 +1,4 @@
+load("@rules_cc//cc:defs.bzl", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 
 _test_script_template = """#!/usr/bin/env bash

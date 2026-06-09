@@ -1,6 +1,7 @@
 """Interop with Java."""
 
 load("@bazel_skylib//lib:collections.bzl", "collections")
+load("@rules_java//java:defs.bzl", "JavaInfo")
 
 JavaInteropInfo = provider(
     doc = "Information needed for interop with Java rules.",

@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe", "read_netrc", "use_netrc")
+load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load(":cc.bzl", "cc_interop_info", "ghc_cc_program_args")
 load(":haddock.bzl", "generate_unified_haddock_info")
@@ -213,7 +214,7 @@ def _prepare_cabal_inputs(
     # already covered by their corresponding package-db entries. We only need
     # to add libraries and headers for direct C library dependencies to the
     # command line.
-    direct_libs = get_ghci_library_files(hs, cc.cc_libraries_info, cc.cc_libraries)
+    direct_libs = get_ghci_library_files(hs, cc.cc_libraries_info, cc.cc_libraries_direct)
 
     # The regular Haskell rules perform mostly static linking, i.e. where
     # possible all C library dependencies are linked statically. Cabal has no
@@ -1508,7 +1509,7 @@ def _pin_packages(repository_ctx, resolved):
     )
     hashes_url = "https://raw.githubusercontent.com/commercialhaskell/all-cabal-hashes/" + hashes_commit
 
-    resolved = dict(**resolved)
+    resolved = dict(resolved)
     for (_name, spec) in resolved.items():
         # Determine package sha256
         if spec["location"]["type"] == "hackage":

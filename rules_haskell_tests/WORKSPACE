@@ -34,6 +34,7 @@ http_archive(
 )
 
 load("@aspect_bazel_lib//lib:repositories.bzl", "register_coreutils_toolchains")
+
 register_coreutils_toolchains()
 
 # bazel dependencies
@@ -60,6 +61,12 @@ rules_proto_dependencies()
 load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
 
 rules_proto_toolchains()
+
+load("@rules_java//java:repositories.bzl", "rules_java_dependencies", "rules_java_toolchains")
+
+rules_java_dependencies()
+
+rules_java_toolchains()
 
 # For buildifier
 http_archive(
@@ -95,7 +102,6 @@ http_archive(
 load("@rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_integration_test_rules_dependencies")
 
 bazel_integration_test_rules_dependencies()
-
 
 load(
     "@rules_haskell//:constants.bzl",

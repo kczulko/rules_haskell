@@ -9,7 +9,9 @@ load(
     "CPP_LINK_EXECUTABLE_ACTION_NAME",
     "C_COMPILE_ACTION_NAME",
 )
+load("@rules_cc//cc:defs.bzl", "CcInfo", "cc_common")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain")
+load("@rules_cc//cc/common:cc_shared_library_info.bzl", "CcSharedLibraryInfo")
 load(
     "//haskell:providers.bzl",
     "HaskellInfo",
@@ -31,7 +33,8 @@ CcInteropInfo = provider(
         "linker_flags": "Flags to forward to the linker",
         "include_args": "Extra include dirs",
         "cc_libraries_info": "HaskellCcLibrariesInfo",
-        "cc_libraries": "depset, C libraries from direct linking dependencies.",
+        "cc_libraries": "depset, C libraries from direct cc_library dependencies (deprecated, use cc_libraries_direct).",
+        "cc_libraries_direct": "depset, C libraries from direct dependencies, including cc_shared_library.",
         "transitive_libraries": "depset, C and Haskell libraries from transitive linking dependencies.",
         "plugin_libraries": "depset, C and Haskell libraries from transitive plugin dependencies.",
         "setup_libraries": "depset, C and Haskell libraries from Cabal setup dependencies.",
@@ -50,6 +53,7 @@ def cc_interop_info(ctx, override_cc_toolchain = None):
       CcInteropInfo: Information needed for CC interop.
     """
     ccs = [dep[CcInfo] for dep in ctx.attr.deps if CcInfo in dep and HaskellInfo not in dep]
+    cc_shared_libraries = [dep[CcSharedLibraryInfo] for dep in ctx.attr.deps if CcSharedLibraryInfo in dep]
 
     hdrs = []
     include_args = []
@@ -160,6 +164,13 @@ def cc_interop_info(ctx, override_cc_toolchain = None):
     plugin_libraries = _transitive_libraries_from_attr(ctx, "plugins")
     setup_libraries = _transitive_libraries_from_attr(ctx, "setup_deps")
 
+    # Collect direct libraries from CcInfo only (for backward compatibility)
+    direct_libraries_from_cc_info = [lib for li in cc_common.merge_cc_infos(cc_infos = ccs).linking_context.linker_inputs.to_list() for lib in li.libraries]
+
+    # Also include libraries from CcSharedLibraryInfo
+    direct_libraries_all = list(direct_libraries_from_cc_info)
+    direct_libraries_all.extend([lib for info in cc_shared_libraries for lib in info.linker_input.libraries])
+
     return CcInteropInfo(
         tools = struct(**tools),
         env = env,
@@ -174,7 +185,8 @@ def cc_interop_info(ctx, override_cc_toolchain = None):
         # https://github.com/bazelbuild/bazel/issues/4571.
         linker_flags = linker_flags,
         cc_libraries_info = cc_libraries_info,
-        cc_libraries = get_cc_libraries(cc_libraries_info, [lib for li in cc_common.merge_cc_infos(cc_infos = ccs).linking_context.linker_inputs.to_list() for lib in li.libraries]),
+        cc_libraries = get_cc_libraries(cc_libraries_info, direct_libraries_from_cc_info),
+        cc_libraries_direct = get_cc_libraries(cc_libraries_info, direct_libraries_all),
         transitive_libraries = transitive_libraries,
         plugin_libraries = plugin_libraries,
         setup_libraries = setup_libraries,
@@ -184,6 +196,7 @@ def ghc_cc_program_args(hs, cc, ld):
     """Returns the -pgm* flags required to override cc.
 
     Args:
+      hs: HaskellContext
       cc: string, path to the C compiler (cc_wrapper).
       ld: string, path to the linker (ld).
 

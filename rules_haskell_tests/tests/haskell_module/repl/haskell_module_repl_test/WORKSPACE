@@ -14,7 +14,6 @@ rules_haskell_dependencies()
 
 load("@rules_haskell//haskell:nixpkgs.bzl", "haskell_register_ghc_nixpkgs")
 
-
 GHC_VERSION = "9.4.8"
 
 haskell_register_ghc_nixpkgs(

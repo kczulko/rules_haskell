@@ -1,6 +1,8 @@
 """Support for protocol buffers"""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@com_google_protobuf//bazel/common:proto_info.bzl", "ProtoInfo")
+load("@rules_cc//cc:defs.bzl", "CcInfo")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load(
     ":private/cc_libraries.bzl",
@@ -21,10 +23,13 @@ load(
 )
 
 def _capitalize_first_letter(c):
-    """Capitalize the first letter of the input. Unlike the built-in
-    `capitalize()` method, doesn't lower-case the other characters. This helps
-    mimic the behavior of `proto-lens-protoc`, which turns `Foo/Bar/BAZ.proto`
-    into `Foo/Bar/BAZ.hs` (rather than `Foo/Bar/Baz.hs`).
+    """
+    Capitalize the first letter of the input.
+
+    Unlike the built-in `capitalize()` method, doesn't lower-case the other
+    characters. This helps mimic the behavior of `proto-lens-protoc`, which
+    turns `Foo/Bar/BAZ.proto` into `Foo/Bar/BAZ.hs` (rather than
+    `Foo/Bar/Baz.hs`).
 
     Args:
       c: A non-empty string word.
@@ -454,6 +459,7 @@ def haskell_proto_toolchain(
       protoc: Protoc compiler.
       plugin: Proto-lens-protoc plugin for protoc.
       deps: List of other Haskell libraries to be linked to protobuf libraries.
+      **kwargs: Additional arguments for _protobuf_toolchain rule.
 
     """
     impl_name = name + "-impl"

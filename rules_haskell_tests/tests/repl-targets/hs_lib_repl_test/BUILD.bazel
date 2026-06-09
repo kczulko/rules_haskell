@@ -1,3 +1,5 @@
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_cc//cc:cc_shared_library.bzl", "cc_shared_library")
 load("@rules_haskell//haskell:c2hs.bzl", "c2hs_library", "c2hs_toolchain")
 load(
     "@rules_haskell//haskell:defs.bzl",

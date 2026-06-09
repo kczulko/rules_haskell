@@ -49,7 +49,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_cc",
-    version = "0.0.9",
+    version = "0.1.1",
 )
 bazel_dep(
     name = "rules_sh",
@@ -86,20 +86,23 @@ bazel_dep(
 )
 single_version_override(
     module_name = "protobuf",
+    patch_strip = 1,
     # see https://github.com/protocolbuffers/protobuf/issues/16844
     # TODO: remove for protobuf version >= 31.0
     patches = ["//:patches/com_google_protobuf-protoc-dbghlp.diff"],
-    patch_strip = 1,
 )
+
 bazel_dep(
     name = "zlib",
     version = "1.3.1.bcr.7",
 )
+
 bazel_dep(
     name = "rules_bazel_integration_test",
     version = "0.27.0",
     dev_dependency = True,
 )
+
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.21.0")
 bazel_dep(name = "rules_shell", version = "0.8.0")
 
@@ -117,8 +120,8 @@ use_repo(
     "haskell_package_repository_dummy",
     "library_repo",
     "os_info",
-    "zlib.hs",
     "runfiles_repo",
+    "zlib.hs",
 )
 
 non_modules_deps_1 = use_extension("//:non_module_deps_1.bzl", "non_module_deps_1")
@@ -354,6 +357,7 @@ use_repo(
     "stackage-exe",
     "stackage-unpinned",
 )
+
 stack_snapshot.snapshot(local_snapshot = "//:stackage_snapshot.yaml")
 stack_snapshot.package(
     name = "ghc-paths",

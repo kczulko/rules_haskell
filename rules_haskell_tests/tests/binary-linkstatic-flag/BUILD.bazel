@@ -123,7 +123,9 @@ sh_inline_test(
         exit 1
     fi
     """,
-    tags = ["dont_test_on_windows"],
+    # this test depends on cc_library targets producing a shared library
+    # which is no longer the case with newer rules_cc versions on macOS
+    tags = ["dont_test_on_windows", "dont_test_on_darwin"],
 )
 
 test_suite(

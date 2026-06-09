@@ -1,4 +1,5 @@
-load("@rules_haskell//haskell:cabal.bzl",
+load(
+    "@rules_haskell//haskell:cabal.bzl",
     "haskell_cabal_args",
     "haskell_cabal_library",
 )
@@ -42,10 +43,6 @@ haskell_cabal_library(
     srcs = [
         "second-lib.cabal",
     ],
-    deps = [
-        ":base",
-        ":first-lib",
-    ],
     cabal_args = "second-lib-cabal-args",
     tags = [
         # Windows builds are not sandboxed, so both cabal files are visible to
@@ -56,6 +53,10 @@ haskell_cabal_library(
         "dont_test_on_windows",
     ],
     version = "0.1.0.0",
+    deps = [
+        ":base",
+        ":first-lib",
+    ],
 )
 
 haskell_test(
