@@ -131,6 +131,15 @@ add_arg() {
 # ----------------------------------------------------------
 # Parse arguments
 
+# Convert PWD to MSYS-style path for use with realpath.
+# On Windows, PWD may be set to Windows-style (C:/...) by Bazel when invoking
+# the cc_wrapper, even though the shell normally uses MSYS-style (/c/...).
+PWD_FOR_REALPATH="$PWD"
+if [[ "$PWD" =~ ^([A-Za-z]):(.*)$ ]]; then
+    # Convert C:/path to /c/path
+    PWD_FOR_REALPATH="/${BASH_REMATCH[1],,}${BASH_REMATCH[2]}"
+fi
+
 IN_RESPONSE_FILE=0
 INCLUDE_DIR_COMING=
 INCLUDE_FLAG=
@@ -154,7 +163,7 @@ shorten_path() {
     fi
 
     local relative
-    relative="$(realpath --relative-to="$PWD" "$shortest")"
+    relative="$(realpath --relative-to="$PWD_FOR_REALPATH" "$shortest")"
     if [[ ${#relative} -lt ${#shortest} ]]; then
         shortest="$relative"
     fi
