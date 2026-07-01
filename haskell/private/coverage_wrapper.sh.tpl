@@ -74,6 +74,25 @@ done
 
 # run the test binary, and then generate the report
 $binary_path "$@" > /dev/null 2>&1
+
+# Persist the coverage inputs (.tix + the .mix dirs) into the test's
+# undeclared outputs. Bazel keeps these as a stable per-target artifact
+# under bazel-testlogs/<target>/test.outputs/, so the lcov post-processor
+# (scripts/coverage.sh) reads complete, deterministic per-target data.
+# Without this the .tix lives ONLY in the ephemeral sandbox, which
+# Bazel's sandbox-stash pool evicts once there are many tests — silently
+# under-counting coverage (a gate that can falter is worse than none).
+if [ -n "${TEST_UNDECLARED_OUTPUTS_DIR:-}" ] && [ -f "$tix_file_path" ]; then
+  cp "$tix_file_path" "$TEST_UNDECLARED_OUTPUTS_DIR/" || echo "coverage: warning: could not persist tix $tix_file_path" >&2
+  mkdir -p "$TEST_UNDECLARED_OUTPUTS_DIR/mix"
+  for _hd in "${hpc_dir_args[@]}"; do
+    _d="${_hd#--hpcdir=}"
+    if [ -d "$_d" ]; then
+      cp -r "$_d" "$TEST_UNDECLARED_OUTPUTS_DIR/mix/" || echo "coverage: warning: could not persist mixdir $_d" >&2
+    fi
+  done
+fi
+
 $hpc_path report "$tix_file_path" "${hpc_dir_args[@]}" "${hpc_exclude_args[@]}" \
   --srcdir "." --srcdir "$package_path" > __hpc_coverage_report
 
