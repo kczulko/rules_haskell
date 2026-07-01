@@ -83,11 +83,13 @@ $binary_path "$@" > /dev/null 2>&1
 # Bazel's sandbox-stash pool evicts once there are many tests — silently
 # under-counting coverage (a gate that can falter is worse than none).
 if [ -n "${TEST_UNDECLARED_OUTPUTS_DIR:-}" ] && [ -f "$tix_file_path" ]; then
-  cp "$tix_file_path" "$TEST_UNDECLARED_OUTPUTS_DIR/" 2>/dev/null || true
+  cp "$tix_file_path" "$TEST_UNDECLARED_OUTPUTS_DIR/" || echo "coverage: warning: could not persist tix $tix_file_path" >&2
   mkdir -p "$TEST_UNDECLARED_OUTPUTS_DIR/mix"
   for _hd in "${hpc_dir_args[@]}"; do
     _d="${_hd#--hpcdir=}"
-    [ -d "$_d" ] && cp -r "$_d" "$TEST_UNDECLARED_OUTPUTS_DIR/mix/" 2>/dev/null || true
+    if [ -d "$_d" ]; then
+      cp -r "$_d" "$TEST_UNDECLARED_OUTPUTS_DIR/mix/" || echo "coverage: warning: could not persist mixdir $_d" >&2
+    fi
   done
 fi
 
